@@ -1,0 +1,72 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="7/12/2025 4:00:41 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="LAPTOP-E0RGI0HO"
+  DTS:CreatorName="LAPTOP-E0RGI0HO\ASUS"
+  DTS:DTSID="{E4FAC200-C428-4DFD-B5F2-829E40B20F0C}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="16.0.5685.0"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="DimDate"
+  DTS:PackageType="5"
+  DTS:VersionBuild="1"
+  DTS:VersionGUID="{53D53577-706A-4E5B-89D5-ECDEC67967A0}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[LAPTOP-E0RGI0HO\MSSQLSERVER1.AWDW2022]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{A101B1D4-D5AB-4A82-90A4-7DD1ADDE6CD6}"
+      DTS:ObjectName="LAPTOP-E0RGI0HO\MSSQLSERVER1.AWDW2022">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=LAPTOP-E0RGI0HO\MSSQLSERVER1;Initial Catalog=AWDW2022;Provider=SQLOLEDB.1;Integrated Security=SSPI;Application Name=SSIS-DimDate-{A101B1D4-D5AB-4A82-90A4-7DD1ADDE6CD6}LAPTOP-E0RGI0HO\MSSQLSERVER1.AWDW2022;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Execute SQL Task"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{8A7CC685-DF9A-4711-9536-D4B3BEB05AB2}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Execute SQL Task"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2022; © 2022 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{A101B1D4-D5AB-4A82-90A4-7DD1ADDE6CD6}"
+          SQLTask:SqlStatementSource="CREATE TABLE dbo.DimDate (&#xA;    DateKey INT PRIMARY KEY,&#xA;    FullDateAlternateKey DATE,&#xA;    DayNumberOfWeek TINYINT,&#xA;    EnglishDayNameOfWeek NVARCHAR(10),&#xA;    SpanishDayNameOfWeek NVARCHAR(10),&#xA;    FrenchDayNameOfWeek NVARCHAR(10),&#xA;    DayNumberOfMonth TINYINT,&#xA;    DayNumberOfYear SMALLINT,&#xA;    WeekNumberOfYear TINYINT,&#xA;    EnglishMonthName NVARCHAR(10),&#xA;    SpanishMonthName NVARCHAR(10),&#xA;    FrenchMonthName NVARCHAR(10),&#xA;    MonthNumberOfYear TINYINT,&#xA;    CalendarQuarter TINYINT,&#xA;    CalendarYear SMALLINT,&#xA;    CalendarSemester TINYINT,&#xA;    FiscalQuarter TINYINT,&#xA;    FiscalYear SMALLINT,&#xA;    FiscalSemester TINYINT&#xA;);&#xA;WITH DateSequence AS (&#xA;    SELECT CAST('2005-01-01' AS DATE) AS DateValue&#xA;    UNION ALL&#xA;    SELECT DATEADD(DAY, 1, DateValue)&#xA;    FROM DateSequence&#xA;    WHERE DateValue &lt; '2007-09-27'&#xA;)&#xA;INSERT INTO dbo.DimDate (&#xA;    DateKey,&#xA;    FullDateAlternateKey,&#xA;    DayNumberOfWeek,&#xA;    EnglishDayNameOfWeek,&#xA;    SpanishDayNameOfWeek,&#xA;    FrenchDayNameOfWeek,&#xA;    DayNumberOfMonth,&#xA;    DayNumberOfYear,&#xA;    WeekNumberOfYear,&#xA;    EnglishMonthName,&#xA;    SpanishMonthName,&#xA;    FrenchMonthName,&#xA;    MonthNumberOfYear,&#xA;    CalendarQuarter,&#xA;    CalendarYear,&#xA;    CalendarSemester,&#xA;    FiscalQuarter,&#xA;    FiscalYear,&#xA;    FiscalSemester&#xA;)&#xA;SELECT&#xA;    CONVERT(INT, FORMAT(DateValue, 'yyyyMMdd')) AS DateKey,&#xA;    DateValue AS FullDateAlternateKey,&#xA;    DATEPART(WEEKDAY, DateValue) AS DayNumberOfWeek,&#xA;    DATENAME(WEEKDAY, DateValue) AS EnglishDayNameOfWeek,&#xA;    -- Spanish day name (simplified - you can add a translation table if needed)&#xA;    CASE DATENAME(WEEKDAY, DateValue)&#xA;        WHEN 'Monday' THEN 'Lunes'&#xA;        WHEN 'Tuesday' THEN 'Martes'&#xA;        WHEN 'Wednesday' THEN 'Miércoles'&#xA;        WHEN 'Thursday' THEN 'Jueves'&#xA;        WHEN 'Friday' THEN 'Viernes'&#xA;        WHEN 'Saturday' THEN 'Sábado'&#xA;        WHEN 'Sunday' THEN 'Domingo'&#xA;    END AS SpanishDayNameOfWeek,&#xA;    -- French day name&#xA;    CASE DATENAME(WEEKDAY, DateValue)&#xA;        WHEN 'Monday' THEN 'Lundi'&#xA;        WHEN 'Tuesday' THEN 'Mardi'&#xA;        WHEN 'Wednesday' THEN 'Mercredi'&#xA;        WHEN 'Thursday' THEN 'Jeudi'&#xA;        WHEN 'Friday' THEN 'Vendredi'&#xA;        WHEN 'Saturday' THEN 'Samedi'&#xA;        WHEN 'Sunday' THEN 'Dimanche'&#xA;    END AS FrenchDayNameOfWeek,&#xA;    DAY(DateValue) AS DayNumberOfMonth,&#xA;    DATEPART(DAYOFYEAR, DateValue) AS DayNumberOfYear,&#xA;    DATEPART(WEEK, DateValue) AS WeekNumberOfYear,&#xA;    DATENAME(MONTH, DateValue) AS EnglishMonthName,&#xA;    -- Spanish month name&#xA;    CASE DATENAME(MONTH, DateValue)&#xA;        WHEN 'January' THEN 'Enero'&#xA;        WHEN 'February' THEN 'Febrero'&#xA;        WHEN 'March' THEN 'Marzo'&#xA;        WHEN 'April' THEN 'Abril'&#xA;        WHEN 'May' THEN 'Mayo'&#xA;        WHEN 'June' THEN 'Junio'&#xA;        WHEN 'July' THEN 'Julio'&#xA;        WHEN 'August' THEN 'Agosto'&#xA;        WHEN 'September' THEN 'Septiembre'&#xA;        WHEN 'October' THEN 'Octubre'&#xA;        WHEN 'November' THEN 'Noviembre'&#xA;        WHEN 'December' THEN 'Diciembre'&#xA;    END AS SpanishMonthName,&#xA;    -- French month name&#xA;    CASE DATENAME(MONTH, DateValue)&#xA;        WHEN 'January' THEN 'Janvier'&#xA;        WHEN 'February' THEN 'Février'&#xA;        WHEN 'March' THEN 'Mars'&#xA;        WHEN 'April' THEN 'Avril'&#xA;        WHEN 'May' THEN 'Mai'&#xA;        WHEN 'June' THEN 'Juin'&#xA;        WHEN 'July' THEN 'Juillet'&#xA;        WHEN 'August' THEN 'Août'&#xA;        WHEN 'September' THEN 'Septembre'&#xA;        WHEN 'October' THEN 'Octobre'&#xA;        WHEN 'November' THEN 'Novembre'&#xA;        WHEN 'December' THEN 'Décembre'&#xA;    END AS FrenchMonthName,&#xA;    MONTH(DateValue) AS MonthNumberOfYear,&#xA;    DATEPART(QUARTER, DateValue) AS CalendarQuarter,&#xA;    YEAR(DateValue) AS CalendarYear,&#xA;    CASE &#xA;        WHEN MONTH(DateValue) BETWEEN 1 AND 6 THEN 1&#xA;        ELSE 2&#xA;    END AS CalendarSemester,&#xA;    -- Fiscal starts in July: July = Month 1 of fiscal year&#xA;    CASE &#xA;        WHEN MONTH(DateValue) BETWEEN 7 AND 9 THEN 1&#xA;        WHEN MONTH(DateValue) BETWEEN 10 AND 12 THEN 2&#xA;        WHEN MONTH(DateValue) BETWEEN 1 AND 3 THEN 3&#xA;        ELSE 4&#xA;    END AS FiscalQuarter,&#xA;    CASE &#xA;        WHEN MONTH(DateValue) &gt;= 7 THEN YEAR(DateValue) + 1&#xA;        ELSE YEAR(DateValue)&#xA;    END AS FiscalYear,&#xA;    CASE &#xA;        WHEN MONTH(DateValue) BETWEEN 7 AND 12 THEN 1&#xA;        ELSE 2&#xA;    END AS FiscalSemester&#xA;FROM DateSequence&#xA;OPTION (MAXRECURSION 32767);&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
+        <NodeLayout
+          Size="162.4,41.6"
+          Id="Package\Execute SQL Task"
+          TopLeft="154.285714614148,61.1764705346118" />
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
